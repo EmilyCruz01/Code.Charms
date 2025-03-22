@@ -446,6 +446,7 @@ function getWebviewContent(
                 }  
             }  
 
+            // Función para crear la escena de los pájaros
             function createBirdScene() {  
                 const container = document.getElementById('animContainer');  
                 const birdCount = 1;  
@@ -465,6 +466,7 @@ function getWebviewContent(
                     bird.style.animationDelay = Math.random() * 2 + 's'; 
                     container.appendChild(bird);
 
+                    // Crear las nubes
                     function createCloud() {
                         const cloud = document.createElement('img');
                         cloud.className = 'clouds'; // Usamos 'clouds' para que tenga la animación de derecha a izquierda
@@ -474,19 +476,21 @@ function getWebviewContent(
                         container.appendChild(cloud);
 
                         cloud.addEventListener('animationend', () => {
-                        cloud.remove();
-                    });
+                            cloud.remove();
+                        });
 
                         return cloud;
                     }
 
-                       animationIntervals.push(setInterval(() => {
+                    // Limitar el número de nubes a 5
+                    animationIntervals.push(setInterval(() => {
                         const existingClouds = container.getElementsByClassName('clouds').length;
                         if (existingClouds < 5) { // Limita el número de nubes en la escena
-                            container.appendChild(createCloud());
+                            createCloud();
                         }
-                        }, 4000));
+                    }, 4000));
 
+                    // Mover el pájaro de izquierda a derecha
                     function moveBird() {  
                         bird.style.left = -bird.offsetWidth + 'px';  
                         bird.style.top = Math.random() * 20 + 20 + '%'; 
@@ -497,15 +501,15 @@ function getWebviewContent(
                         }, 50);  
                     }
 
-
                     moveBird();  
                     animationIntervals.push(setInterval(moveBird, 6000));  
                 }  
             }  
 
-              function createSerpienteScene() {  
+            // Función para crear la escena de la serpiente
+            function createSerpienteScene() {  
                 const container = document.getElementById('animContainer');  
-                
+
                 // Fondo de la serpiente  
                 const fondo = document.createElement('div');  
                 fondo.className = 'fondo-serpiente';  
@@ -518,14 +522,19 @@ function getWebviewContent(
                 serpiente.classList.add("serpiente-img");  
                 container.appendChild(serpiente);  
 
-                // Crear lluvia  
+                // Crear lluvia
+                const rainContainer = document.createElement('div');
+                rainContainer.id = 'rainContainer'; 
+                container.appendChild(rainContainer);
+
+                // Función para crear gotas de lluvia
                 function createRain() {
                     const rainDrop = document.createElement('div');
                     rainDrop.className = 'rain-drop';
-                    rainDrop.style.left = Math.random() * 100 + '%'; 
-                    rainDrop.style.animationDuration = (1 + Math.random() * 2) + 's'; 
-                    rainDrop.style.animationDelay = Math.random() * 3 + 's'; 
-                    container.appendChild(rainDrop);
+                    rainDrop.style.left = Math.random() * 100 + '%';
+                    rainDrop.style.animationDuration = (1 + Math.random() * 2) + 's';
+                    rainDrop.style.animationDelay = Math.random() * 3 + 's';
+                    rainContainer.appendChild(rainDrop);
 
                     // Eliminar la gota después de que la animación termine
                     rainDrop.addEventListener('animationend', () => {
@@ -533,9 +542,16 @@ function getWebviewContent(
                     });
                 }
 
-                // Generar gotas de lluvia a intervalos
-                setInterval(createRain, 300);  
+                // Generar gotas de lluvia a intervalos para mantener siempre 300 gotas
+                setInterval(() => {
+                    const currentRainDrops = rainContainer.getElementsByClassName('rain-drop').length;
+
+                    if (currentRainDrops < 100) { 
+                        createRain();
+                    }
+                }, 300);  
             }
+
 
 
             document.getElementById('serpienteBtn').addEventListener('click', () => {  
@@ -562,7 +578,7 @@ function getWebviewContent(
         })();  
     </script>  
 </body>  
-</html>  
+</html>
 
 `;
 }
